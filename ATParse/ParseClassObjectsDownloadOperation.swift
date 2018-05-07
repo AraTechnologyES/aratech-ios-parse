@@ -58,15 +58,11 @@ open class ParseClassObjectsDownloadOperation<T: PFObject>: Operation where T: P
     ///
     /// - Parameters:
     ///   - query:				Consulta para la petición, nulo por defecto.
-    ///   - includedKeys:		Claves a incluir en la búsqueda para obtener los objetos relacionados
-    ///   - cachePolicy:		Política de cache, ignorar cache por defecto
 	///   - pageSize:			Número de elementos máximos por petición, `100` por defecto
 	///   - page:					Página que se desea obtener. Si la página es 2, se recabarán los segundos `pageSize` elementos. `1` por defecto. Si se desean todos los objetos, pasar `0`.
 	///   - orderBy:				Ordenación de los resultados de la query
     ///   - completionQueue:	Cola en la que ejecutar el bloque al término de la operación, principal por defecto
 	public init(query: PFQuery<T>,
-				includingKeys includedKeys: [String] = [],
-				cachePolicy: PFCachePolicy = .ignoreCache,
 				pageSize: Int = defaultPageSize,
 				page: Int = 1,
 				orderBy: [OrderBy] = [],
@@ -75,10 +71,6 @@ open class ParseClassObjectsDownloadOperation<T: PFObject>: Operation where T: P
 		self.completionQueue = completionQueue
         
         self.query = query
-        
-        self.query.includeKeys(includedKeys)
-        
-        self.query.cachePolicy = cachePolicy
 		
 		self.page = page
 		

@@ -11,18 +11,9 @@ import Parse
 
 open class ATParse {
 	
-	/// Instancia por defecto, con configuración de cache ignorar cache.
+	/// Instancia por defecto.
 	public static let `default`: ATParse = ATParse()
-    
-    /// Política de cache
-    private let cachePolicy: PFCachePolicy
-    
-    ///
-    /// - Parameter cachePolicy: Política de cache a aplicar en las peticiones, ignorar cache por defecto
-    public init(withCachePolicy cachePolicy: PFCachePolicy = .ignoreCache) {
-        self.cachePolicy = cachePolicy
-    }
-    
+	
     /// Realiza el login en el servidor Parse
     ///
     /// - Parameters:
@@ -50,20 +41,18 @@ open class ATParse {
 	///   - orderBy: Ordenación de los resultados
     ///   - completionQueue: Cola en la que ejecutar el bloque de terminación, principal por defecto
     ///   - completion: Bloque de terminación, nulo por defecto
-    /// - Returns: Centinela para que el compilador pueda inferir el tipo T, NO USAR
+    /// - Returns: Operación de descarga
+	@discardableResult
 	public func fetchObjects<T>(withQuery query: PFQuery<T>,
-								includingKeys includedKeys: [String] = [],
 								async: Bool = true,
 								pageSize: Int = defaultPageSize,
 								page: Int = 1,
 								orderedBy orderBy: [OrderBy] = [],
 								completionQueue: DispatchQueue = .main,
-								completion: FetchPFObjectsResult<T>? = nil) -> T? where T: PFSubclassing {
+								completion: FetchPFObjectsResult<T>? = nil) -> ParseClassObjectsDownloadOperation<T> where T: PFSubclassing {
         
 		let operation: ParseClassObjectsDownloadOperation<T> =
 			ParseClassObjectsDownloadOperation<T>(query: query,
-												  includingKeys: includedKeys,
-												  cachePolicy: self.cachePolicy,
 												  pageSize: pageSize,
 												  page: page,
 												  orderBy: orderBy,
@@ -79,6 +68,6 @@ open class ATParse {
             queue.waitUntilAllOperationsAreFinished()
         }
         
-        return operation.objects?.first
+        return operation
     }
 }
