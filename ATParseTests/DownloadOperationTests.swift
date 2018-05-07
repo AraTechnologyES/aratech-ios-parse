@@ -42,7 +42,7 @@ class DownloadOperationTests: XCTestCase {
 	
 	var cachedQueryOperation: ParseClassObjectsDownloadOperation<ATParseObjectSubclass> {
 		let query: PFQuery<ATParseObjectSubclass> = self.query
-		let operation: ParseClassObjectsDownloadOperation<ATParseObjectSubclass> = ParseClassObjectsDownloadOperation(query: query, cachePolicy: .cacheElseNetwork)
+		let operation: ParseClassObjectsDownloadOperation<ATParseObjectSubclass> = ParseClassObjectsDownloadOperation<ATParseObjectSubclass>(query: query)
 		return operation
 	}
     
@@ -75,7 +75,7 @@ class DownloadOperationTests: XCTestCase {
         let succesfullFetchExpectation = expectation(description: "Successfully fetched from network")
 		
 		let query: PFQuery<ATParseObjectSubclass> = ATParseObjectSubclass.query() as! PFQuery<ATParseObjectSubclass>
-		let operation: ParseClassObjectsDownloadOperation<ATParseObjectSubclass> = ParseClassObjectsDownloadOperation(query: query, cachePolicy: .ignoreCache)
+		let operation: ParseClassObjectsDownloadOperation<ATParseObjectSubclass> = ParseClassObjectsDownloadOperation<ATParseObjectSubclass>(query: query)
 		
         operation.query.clearCachedResult()
 		

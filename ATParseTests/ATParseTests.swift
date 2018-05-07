@@ -25,10 +25,7 @@ class ATParseObjectSubclass: ATParseObject, PFSubclassing {
 }
 
 class ATParseTests: XCTestCase {
-    
-    var ignoringCacheATParse: ATParse = ATParse(withCachePolicy: .ignoreCache)
-    var cacheElseNetworkATParse: ATParse = ATParse(withCachePolicy: .cacheElseNetwork)
-    
+        
     override func setUp() {
         super.setUp()
         
@@ -109,9 +106,9 @@ class ATParseTests: XCTestCase {
 	
 	func testSyncFetch() {
 		let query: PFQuery<ATParseObjectSubclass> = ATParseObjectSubclass.query()! as! PFQuery<ATParseObjectSubclass>
-		let objects: ATParseObjectSubclass? = self.ignoringCacheATParse.fetchObjects(withQuery: query, async: false)
+		let operation = ATParse.default.fetchObjects(withQuery: query, async: false)
 		
-		XCTAssert(objects?.property(forKey: "name") == "test")
+		XCTAssert(operation.objects?.first?.property(forKey: "name") == "test")
 	}
     
     func testATParseFetch() {
@@ -119,7 +116,7 @@ class ATParseTests: XCTestCase {
         let succesfullFetchExpectation = expectation(description: "Successfully fetched into \(Parse.currentConfiguration()?.server ?? ""))")
 
 		let query: PFQuery<ATParseObjectSubclass> = ATParseObjectSubclass.query() as! PFQuery<ATParseObjectSubclass>
-		let _: ATParseObjectSubclass? = self.ignoringCacheATParse.fetchObjects(withQuery: query) { (error, objects) in
+		let _ = ATParse.default.fetchObjects(withQuery: query) { (error, objects) in
 
             XCTAssert(error == nil)
             NSLog("\(objects ?? [])")
@@ -139,7 +136,7 @@ class ATParseTests: XCTestCase {
 		let succesfullFetchExpectation = expectation(description: "Successfully fetched into \(Parse.currentConfiguration()?.server ?? ""))")
 
 		let query: PFQuery<ATParseObjectSubclass> = ATParseObjectSubclass.query() as! PFQuery<ATParseObjectSubclass>
-		let _: ATParseObjectSubclass? = self.ignoringCacheATParse.fetchObjects(withQuery: query, page: 0) { (error, objects) in
+		let _ = ATParse.default.fetchObjects(withQuery: query, page: 0) { (error, objects) in
 
 			XCTAssert(error == nil)
 			XCTAssert(objects!.count > 1000)
@@ -161,7 +158,7 @@ class ATParseTests: XCTestCase {
 		let succesfullFetchExpectation = expectation(description: "Successfully fetched into \(Parse.currentConfiguration()?.server ?? ""))")
 		
 		let query: PFQuery<ATParseObjectSubclass> = ATParseObjectSubclass.query() as! PFQuery<ATParseObjectSubclass>
-		let _: ATParseObjectSubclass? = self.ignoringCacheATParse.fetchObjects(withQuery: query, page: 2, orderedBy: [(.descending, "index")]) { (error, objects) in
+		let _ = ATParse.default.fetchObjects(withQuery: query, page: 2, orderedBy: [(.descending, "index")]) { (error, objects) in
 			
 			XCTAssert(error == nil)
 			XCTAssert(objects!.count == 100)
@@ -184,7 +181,7 @@ class ATParseTests: XCTestCase {
         
         let succesfullLoginExpectation = expectation(description: "Successfully logging into \(Parse.currentConfiguration()?.server ?? ""))")
         
-		self.ignoringCacheATParse.login(.normal(username: "apple", password: "12345")) { (error: UserError?, user: PFUser?, _) in
+		ATParse.default.login(.normal(username: "apple", password: "12345")) { (error: UserError?, user: PFUser?, _) in
 			
             XCTAssert(error == UserError.noError() && user?.value(forKey: "username") as? String == "apple")
             succesfullLoginExpectation.fulfill()
