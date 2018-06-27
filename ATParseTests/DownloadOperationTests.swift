@@ -100,6 +100,48 @@ class DownloadOperationTests: XCTestCase {
             }
         }
     }
+	
+	func testDownloadOperationCompletionBlockExecutesInOrder() {
+		// Given
+		var endOrder: [String] = []
+		let query = ATParseObjectSubclass.query()! as! PFQuery<ATParseObjectSubclass>
+		
+		let firstOperationExpectation = expectation(description: "firstOperationExpectation")
+		let firstOperationToEnd = ParseClassObjectsDownloadOperation<ATParseObjectSubclass>(query: query, page: 0)
+		firstOperationToEnd.completion = { (_,_) in
+			endOrder.append("1")
+			firstOperationExpectation.fulfill()
+		}
+		
+		let secondOperationExpectation = expectation(description: "secondOperationExpectation")
+		let secondOperationToEnd = ParseClassObjectsDownloadOperation<ATParseObjectSubclass>(query: query, page: 1)
+		secondOperationToEnd.completion = { _, _ in
+			endOrder.append("2")
+			secondOperationExpectation.fulfill()
+		}
+		
+		let thirdOperationExpectation = expectation(description: "thirdOperationExpectation")
+		let thirdOperationToEnd = ParseClassObjectsDownloadOperation<ATParseObjectSubclass>(query: query, page: 2)
+		thirdOperationToEnd.completion = { _, _ in
+			endOrder.append("3")
+			thirdOperationExpectation.fulfill()
+		}
+		
+		// When
+		
+		thirdOperationToEnd.addDependency(secondOperationToEnd)
+		secondOperationToEnd.addDependency(firstOperationToEnd)
+		
+		let operationQueue = OperationQueue()
+		operationQueue.qualityOfService = .background
+		
+		operationQueue.addOperations([firstOperationToEnd, secondOperationToEnd, thirdOperationToEnd], waitUntilFinished: false)
+		waitForExpectations(timeout: 10.0, handler: nil)
+		
+		// Then
+		
+		XCTAssert(endOrder == ["1", "2", "3"])
+	}
     
     func testPerformanceNetworkQuery() {
         self.measure {

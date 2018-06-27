@@ -10,7 +10,7 @@ import XCTest
 import Parse
 @testable import ATParse
 
-class ATParseObjectSubclass: ATParseObject, PFSubclassing {
+class ATParseObjectSubclass: PFObject, PFSubclassing {
 	
 	convenience init(withKey key: String, value: Any) {
 		self.init()
@@ -85,7 +85,6 @@ class ATParseTests: XCTestCase {
 		atParseSubclass.setProperty("test2", forKey: "test")
 		
 		XCTAssert(atParseSubclass.property(forKey: "test")! == "test2")
-		XCTAssert(atParseSubclass.itemDescription == "name")
 	}
 	
     func testATParseObjectSubclass() {
@@ -95,15 +94,6 @@ class ATParseTests: XCTestCase {
         XCTAssert(test.property(forKey: "name")==nil)
     }
     
-    func testParseCustomStringConvertible() {
-        
-        let test: ATParseObjectSubclass = ATParseObjectSubclass()
-        
-        test.setValue("aName", forKey: "name")
-        
-        XCTAssert((test.itemDescription)=="aName")
-    }
-	
 	func testSyncFetch() {
 		let query: PFQuery<ATParseObjectSubclass> = ATParseObjectSubclass.query()! as! PFQuery<ATParseObjectSubclass>
 		let operation = ATParse.default.fetchObjects(withQuery: query, async: false)

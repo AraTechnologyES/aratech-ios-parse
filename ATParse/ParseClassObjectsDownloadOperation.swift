@@ -50,10 +50,7 @@ open class ParseClassObjectsDownloadOperation<T: PFObject>: Operation where T: P
     
     /// Bloque a ejecutar cuando finalice la operación
     public var completion: FetchPFObjectsResult<T>?
-    
-    /// Cola en la que se ejecutará el bloque al término de la operación, principal por defecto
-    var completionQueue: DispatchQueue
-    
+	
     ///
     ///
     /// - Parameters:
@@ -61,15 +58,11 @@ open class ParseClassObjectsDownloadOperation<T: PFObject>: Operation where T: P
 	///   - pageSize:			Número de elementos máximos por petición, `100` por defecto
 	///   - page:					Página que se desea obtener. Si la página es 2, se recabarán los segundos `pageSize` elementos. `1` por defecto. Si se desean todos los objetos, pasar `0`.
 	///   - orderBy:				Ordenación de los resultados de la query
-    ///   - completionQueue:	Cola en la que ejecutar el bloque al término de la operación, principal por defecto
 	public init(query: PFQuery<T>,
 				pageSize: Int = defaultPageSize,
 				page: Int = 1,
-				orderBy: [OrderBy] = [],
-				completionQueue: DispatchQueue = .main) {
-
-		self.completionQueue = completionQueue
-        
+				orderBy: [OrderBy] = []) {
+		
         self.query = query
 		
 		self.page = page
@@ -150,9 +143,7 @@ open class ParseClassObjectsDownloadOperation<T: PFObject>: Operation where T: P
         
         // Si hay bloque de terminación
         if let completion = self.completion {
-            self.completionQueue.async {
-                completion(self.error, self.objects)
-            }
+			completion(self.error, self.objects)
         }
     }
 }

@@ -39,7 +39,6 @@ open class ATParse {
 	///	  - pageSize: Número de elementos a recabar, `100` por defecto.
 	///   - page: Página, si por ejemplo se desean los segundos 100 elementos, este parametro debería de valer 2 y pageSize `100`. Si se desean todos los objetos, pasar `0`.
 	///   - orderBy: Ordenación de los resultados
-    ///   - completionQueue: Cola en la que ejecutar el bloque de terminación, principal por defecto
     ///   - completion: Bloque de terminación, nulo por defecto
     /// - Returns: Operación de descarga
 	@discardableResult
@@ -48,15 +47,13 @@ open class ATParse {
 								pageSize: Int = defaultPageSize,
 								page: Int = 1,
 								orderedBy orderBy: [OrderBy] = [],
-								completionQueue: DispatchQueue = .main,
 								completion: FetchPFObjectsResult<T>? = nil) -> ParseClassObjectsDownloadOperation<T> where T: PFSubclassing {
         
 		let operation: ParseClassObjectsDownloadOperation<T> =
 			ParseClassObjectsDownloadOperation<T>(query: query,
 												  pageSize: pageSize,
 												  page: page,
-												  orderBy: orderBy,
-												  completionQueue: completionQueue)
+												  orderBy: orderBy)
         
         operation.completion = completion
         
