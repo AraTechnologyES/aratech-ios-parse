@@ -1,12 +1,11 @@
 //
-//  ATParseObject.swift
+//  PFObject+Property.swift
 //  ATParse
 //
 //  Created by Nicolas Landa on 4/1/17.
-//  Copyright © 2017 Nicolas Landa. All rights reserved.
+//  Copyright © 2018 AraTech. All rights reserved.
 //
 
-import UIKit
 import Parse
 
 public extension PFObject {
