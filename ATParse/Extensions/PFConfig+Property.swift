@@ -31,7 +31,7 @@ open class PFConfigKeys { fileprivate init() {} }
 /// Clave para obtener un parámetro de un PFConfig.
 open class PFConfigKey<ValueType>: PFConfigKeys, RawRepresentable {
 	
-	open let rawValue: String
+	public let rawValue: String
 	internal let defaultValue: ValueType?
 	
 	// MARK: - Init

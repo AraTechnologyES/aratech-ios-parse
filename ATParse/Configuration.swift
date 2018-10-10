@@ -6,7 +6,11 @@
 //  Copyright © 2018 Nicolas Landa. All rights reserved.
 //
 
+import os
 import Parse
+
+@available(iOS 10.0, *)
+private let customLog = OSLog(subsystem: "com.aratech.ATParse", category: "ParseClientConfiguration")
 
 public extension ParseClientConfiguration {
 	
@@ -29,7 +33,12 @@ public extension ParseClientConfiguration {
 			}
 			
 		} catch let error {
-			NSLog(error.localizedDescription)
+			if #available(iOS 10.0, *) {
+				os_log("%@", log: customLog, type: .error, error.localizedDescription)
+			} else {
+				NSLog(error.localizedDescription)
+			}
+			
 			return nil
 		}
 	}

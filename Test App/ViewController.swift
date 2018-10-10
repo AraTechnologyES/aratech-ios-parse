@@ -23,6 +23,10 @@ class ViewController: UIViewController {
 		
 		let fetchOperation = ATParse.default.fetchObjects(withQuery: PFQuery<ParseSubclass>())
 		
+		PFConfig.current()[.test]
 	}
 }
 
+extension PFConfigKeys {
+	static let test = PFConfigKey<String>(forKey: "test")
+}
