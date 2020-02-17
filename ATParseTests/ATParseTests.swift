@@ -29,7 +29,7 @@ class ATParseTests: XCTestCase {
     override func setUp() {
         super.setUp()
         
-        if Parse.currentConfiguration() == nil {
+        if Parse.currentConfiguration == nil {
         
             // Put setup code here. This method is called before the invocation of each test method in the class.
 			
@@ -103,7 +103,7 @@ class ATParseTests: XCTestCase {
     
     func testATParseFetch() {
     
-        let succesfullFetchExpectation = expectation(description: "Successfully fetched into \(Parse.currentConfiguration()?.server ?? ""))")
+        let succesfullFetchExpectation = expectation(description: "Successfully fetched into \(Parse.currentConfiguration?.server ?? ""))")
 
 		let query: PFQuery<ATParseObjectSubclass> = ATParseObjectSubclass.query() as! PFQuery<ATParseObjectSubclass>
 		let _ = ATParse.default.fetchObjects(withQuery: query) { (error, objects) in
@@ -123,7 +123,7 @@ class ATParseTests: XCTestCase {
 	
 	func testATParseFullFetch() {
 		
-		let succesfullFetchExpectation = expectation(description: "Successfully fetched into \(Parse.currentConfiguration()?.server ?? ""))")
+        let succesfullFetchExpectation = expectation(description: "Successfully fetched into \(Parse.currentConfiguration?.server ?? ""))")
 
 		let query: PFQuery<ATParseObjectSubclass> = ATParseObjectSubclass.query() as! PFQuery<ATParseObjectSubclass>
 		let _ = ATParse.default.fetchObjects(withQuery: query, page: 0) { (error, objects) in
@@ -145,7 +145,7 @@ class ATParseTests: XCTestCase {
 	
 	func testATParsePaginatedFetch() {
 		
-		let succesfullFetchExpectation = expectation(description: "Successfully fetched into \(Parse.currentConfiguration()?.server ?? ""))")
+        let succesfullFetchExpectation = expectation(description: "Successfully fetched into \(Parse.currentConfiguration?.server ?? ""))")
 		
 		let query: PFQuery<ATParseObjectSubclass> = ATParseObjectSubclass.query() as! PFQuery<ATParseObjectSubclass>
 		let _ = ATParse.default.fetchObjects(withQuery: query, page: 2, orderedBy: [(.descending, "index")]) { (error, objects) in
@@ -169,7 +169,7 @@ class ATParseTests: XCTestCase {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
         
-        let succesfullLoginExpectation = expectation(description: "Successfully logging into \(Parse.currentConfiguration()?.server ?? ""))")
+        let succesfullLoginExpectation = expectation(description: "Successfully logging into \(Parse.currentConfiguration?.server ?? ""))")
         
 		ATParse.default.login(.normal(username: "apple", password: "12345")) { (error: UserError?, user: PFUser?, _) in
 			

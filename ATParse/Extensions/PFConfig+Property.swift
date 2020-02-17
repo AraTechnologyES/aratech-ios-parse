@@ -10,7 +10,7 @@ import Parse
 
 public extension PFConfig {
 	
-	public subscript<T>(key: PFConfigKey<T>) -> T? {
+	subscript<T>(key: PFConfigKey<T>) -> T? {
 		return (self.object(forKey: key.rawValue) as? T) ?? key.defaultValue
 	}
 }

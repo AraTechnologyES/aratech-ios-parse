@@ -14,7 +14,7 @@ private let customLog = OSLog(subsystem: "com.aratech.ATParse", category: "Parse
 
 public extension ParseClientConfiguration {
 	
-	public struct PlistConfiguration: Codable {
+	struct PlistConfiguration: Codable {
 		public let applicationId: String
 		public let clientKey: String
 		public let server: String

@@ -16,7 +16,7 @@ class DownloadOperationTests: XCTestCase {
     override func setUp() {
         super.setUp()
 
-		if Parse.currentConfiguration() == nil {
+        if Parse.currentConfiguration == nil {
 			
 			// Put setup code here. This method is called before the invocation of each test method in the class.
 			
