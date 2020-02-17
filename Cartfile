@@ -1,4 +1,2 @@
-github "parse-community/Parse-SDK-iOS-OSX" "1.17.2"
-github "AraTechnologyES/aratech-ios-lib" "1.1.17"
-
-github "facebook/facebook-ios-sdk" "sdk-version-4.38.0"
+github "parse-community/Parse-SDK-iOS-OSX" "1.17.3"
+github "AraTechnologyES/aratech-ios-lib" "1.2.0"
