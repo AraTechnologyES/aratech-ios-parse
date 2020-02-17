@@ -101,7 +101,7 @@ class LoginOperation: Operation {
     /// - Parameter signUpIfLoginFails: Por defecto a *true*, indica si se desea realizar el registro a través de Facebook en caso de que el token actual no funcione.
     private func facebookLogIn(signUpIfLoginFails: Bool = true) {
         
-        guard let token = FBSDKAccessToken.current() else {
+        guard let token = AccessToken.current else {
             // Si no hay token guardado, al registro
             NSLog("No previously saved token, skipping to registration")
             
@@ -159,55 +159,46 @@ class LoginOperation: Operation {
 						}
 						
 						// Se le piden a Facebook los datos del usuario, para completar la información del registro
-						if let userDetails = FBSDKGraphRequest(graphPath: "me", parameters: requestParameters) {
-							
-							userDetails.start(completionHandler: { (_, result, error) in
-								if let error = error as NSError? {
-									NSLog(error.localizedDescription)
-									self.error = UserError(withCode: error.code)
-									
-									if error.code == 8 { // Error con la petición al Facebook Graph
-										user.deleteInBackground()
-										self.error = UserError.unknown
-									}
-									
-								} else {
-									if let result = result as? NSDictionary {
-										
-										let userId = result["id"] as? String
-										
-										NSLog("Details from user with id: \(userId ?? "unknown") successfully adquired")
-										
-										user.saveInBackground { _, error in
-											if let error = error as NSError? {
-												NSLog("Error updating user \(user.description): \(error)")
-												self.error = UserError(withCode: error.code)
-											} else {
-												self.error = UserError.noError()
-											}
-											
-											self.completionQueue.async {
-												self.completion?(self.error, user, result as? [String: Any])
-											}
-										}
-									} else {
-										NSLog("Could not cast the response to a Dictionary")
-										self.error = UserError(withCode: 0)
-										
-										self.completionQueue.async {
-											self.completion?(self.error, user, nil)
-										}
-									}
-								}
-							})
-						} else {
-							NSLog("Something occurred when creating the GraphRequest")
-							self.error = UserError(withCode: 0)
-							
-							self.completionQueue.async {
-								self.completion?(self.error, user, nil)
-							}
-						}
+                        let userDetails = GraphRequest(graphPath: "me", parameters: requestParameters)
+                        userDetails.start(completionHandler: { (_, result, error) in
+                            if let error = error as NSError? {
+                                NSLog(error.localizedDescription)
+                                self.error = UserError(withCode: error.code)
+                                
+                                if error.code == 8 { // Error con la petición al Facebook Graph
+                                    user.deleteInBackground()
+                                    self.error = UserError.unknown
+                                }
+                                
+                            } else {
+                                if let result = result as? NSDictionary {
+                                    
+                                    let userId = result["id"] as? String
+                                    
+                                    NSLog("Details from user with id: \(userId ?? "unknown") successfully adquired")
+                                    
+                                    user.saveInBackground { _, error in
+                                        if let error = error as NSError? {
+                                            NSLog("Error updating user \(user.description): \(error)")
+                                            self.error = UserError(withCode: error.code)
+                                        } else {
+                                            self.error = UserError.noError()
+                                        }
+                                        
+                                        self.completionQueue.async {
+                                            self.completion?(self.error, user, result as? [String: Any])
+                                        }
+                                    }
+                                } else {
+                                    NSLog("Could not cast the response to a Dictionary")
+                                    self.error = UserError(withCode: 0)
+                                    
+                                    self.completionQueue.async {
+                                        self.completion?(self.error, user, nil)
+                                    }
+                                }
+                            }
+                        })
 					} else {
 						// El usuario no es nuevo, hacer login
 						NSLog("The user is not new, loggin in...")
